@@ -1,7 +1,18 @@
+version: '3'
+
 services:
   app:
     build: .
     volumes:
-      - .:/app
+      - .:/app  # ローカルディレクトリをコンテナにマウント
+      - transcriber_data:/app/data  # 文字起こしデータ用の永続ボリューム
     working_dir: /app
     tty: true
+    environment:
+      - PYTHONUNBUFFERED=1  # Pythonの出力バッファリングを無効化
+    ports:
+      - "8080:8080"  # 将来的なWeb APIのためのポート（オプション）
+    command: python -m src.main  # デフォルトのコマンド
+
+volumes:
+  transcriber_data:  # 文字起こし結果を保存するための永続ボリューム

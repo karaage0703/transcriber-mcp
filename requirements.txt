@@ -1,3 +1,5 @@
 # Requirements for the Python project
-# Add your project dependencies here.
+faster-whisper
+mcp[cli]
 pytest
+ffmpeg-python  # 音声・動画ファイル処理用
