@@ -5,7 +5,6 @@ Transcriber MCP
 音声・動画ファイルをテキストに変換するMCP（Model Context Protocol）準拠のサーバー
 """
 
-import os
 import sys
 import argparse
 import logging
@@ -62,7 +61,6 @@ def main():
         help="使用するモデルサイズ (デフォルト: base)",
     )
     parser.add_argument("--output-dir", help="文字起こし結果の出力ディレクトリ（指定されない場合は一時ディレクトリを使用）")
-    args = parser.parse_args()
 
     try:
         # MCPサーバーの起動

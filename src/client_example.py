@@ -3,7 +3,6 @@
 Transcriber MCPサーバーの動作確認用クライアント例
 """
 
-import os
 import sys
 import json
 import argparse

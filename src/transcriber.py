@@ -7,7 +7,6 @@ faster-whisperを使用して音声・動画ファイルの文字起こしを行
 import os
 import logging
 import tempfile
-from pathlib import Path
 from typing import Optional
 
 

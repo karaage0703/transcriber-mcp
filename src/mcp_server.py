@@ -8,7 +8,7 @@ JSON-RPC over stdioを使用してクライアントからのリクエストを�
 import sys
 import json
 import logging
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from pathlib import Path
 
 from src.transcriber import Transcriber
@@ -156,9 +156,10 @@ class MCPServer:
             "serverInfo": {
                 "name": "transcribe",
                 "version": "0.1.0",
-                "description": "音声・動画ファイルをテキストに変換するMCPサーバー",
+                "description": "音声・動画ファイルをテキストに変換するMCPサーバー。",
             },
             "capabilities": {"tools": {"listChanged": False}, "resources": {"listChanged": False, "subscribe": False}},
+            "instructions": "transcribeを使用する際の注意点:\n1. file_pathパラメータには絶対パスを使用してください。相対パスを使用すると正しく処理できない場合があります。",
         }
 
         self._send_result(response, request_id)
@@ -252,7 +253,10 @@ class MCPServer:
                 "inputSchema": {
                     "type": "object",
                     "properties": {
-                        "file_path": {"type": "string", "description": "文字起こし対象の音声・動画ファイルパス"},
+                        "file_path": {
+                            "type": "string",
+                            "description": "文字起こし対象の音声・動画ファイルパス。絶対パスを使用してください。",
+                        },
                     },
                     "required": ["file_path"],
                 },
