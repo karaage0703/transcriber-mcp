@@ -77,12 +77,13 @@ class Transcriber:
 
         return True
 
-    def transcribe(self, file_path: str) -> str:
+    def transcribe(self, file_path: str, output_path: Optional[str] = None) -> str:
         """
         音声・動画ファイルを文字起こしし、結果をファイルに保存する
 
         Args:
             file_path: 文字起こし対象のファイルパス
+            output_path: 出力先のファイルパス（指定がない場合は自動生成）
 
         Returns:
             文字起こし結果のファイルパス
@@ -105,10 +106,17 @@ class Transcriber:
 
             self.logger.info(f"文字起こしが完了しました: {len(transcript)} 文字")
 
-            # 出力ファイルパスの生成
-            input_filename = os.path.basename(file_path)
-            output_filename = f"{os.path.splitext(input_filename)[0]}_transcribed.txt"
-            output_path = os.path.join(self.output_dir, output_filename)
+            # 出力ファイルパスの設定
+            if output_path is None:
+                # 出力ファイルパスの自動生成
+                input_filename = os.path.basename(file_path)
+                output_filename = f"{os.path.splitext(input_filename)[0]}_transcribed.txt"
+                output_path = os.path.join(self.output_dir, output_filename)
+            else:
+                # 出力ディレクトリの作成
+                output_dir = os.path.dirname(output_path)
+                if output_dir:
+                    os.makedirs(output_dir, exist_ok=True)
 
             # 結果をファイルに保存
             with open(output_path, "w", encoding="utf-8") as f:
