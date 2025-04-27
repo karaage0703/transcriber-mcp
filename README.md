@@ -101,13 +101,16 @@ Clineの設定ファイル（通常は`~/.config/cline/settings/mcp_settings.jso
       "/path/to/transcriber-mcp",
       "python",
       "-m",
-      "src.main"
+      "src.main",
+      "--model-size=base"
     ]
   }
 }
 ```
 
 ※ `--directory`のパスは実際の環境に合わせて変更してください。
+
+※ `--model-size`は "tiny, "base", "small", "medium", "large" から選択できます。
 
 ## サポートするファイル形式
 

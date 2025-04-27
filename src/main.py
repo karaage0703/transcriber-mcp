@@ -61,11 +61,12 @@ def main():
         help="使用するモデルサイズ (デフォルト: base)",
     )
     parser.add_argument("--output-dir", help="文字起こし結果の出力ディレクトリ（指定されない場合は一時ディレクトリを使用）")
+    args = parser.parse_args()
 
     try:
         # MCPサーバーの起動
         logger.info("Transcriber MCPサーバーを起動します...")
-        server = MCPServer()
+        server = MCPServer(model_size=args.model_size, output_dir=args.output_dir)
         server.start()
 
     except KeyboardInterrupt:

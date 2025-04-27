@@ -25,11 +25,15 @@ class MCPServer:
         logger: ロガー
     """
 
-    def __init__(self):
+    def __init__(self, model_size="base", output_dir=None):
         """
         MCPServerのコンストラクタ
+
+        Args:
+            model_size: 使用するモデルサイズ ("tiny", "base", "small", "medium", "large")
+            output_dir: 文字起こし結果の出力ディレクトリ（指定がない場合は一時ディレクトリを使用）
         """
-        self.transcriber = Transcriber()
+        self.transcriber = Transcriber(model_size=model_size, output_dir=output_dir)
 
         # ロガーの設定
         self.logger = logging.getLogger("mcp_server")
@@ -189,13 +193,14 @@ class MCPServer:
             return
 
         file_path = params["file_path"]
+        output_path = params.get("output_path")
 
         try:
             # 文字起こしを実行
-            output_path = self.transcriber.transcribe(file_path)
+            result_path = self.transcriber.transcribe(file_path, output_path)
 
             # レスポンスを送信
-            self._send_result({"result": output_path}, request_id)
+            self._send_result({"result": result_path}, request_id)
 
         except FileNotFoundError:
             self._send_error(-32602, f"File not found: {file_path}", request_id)
@@ -257,6 +262,10 @@ class MCPServer:
                             "type": "string",
                             "description": "文字起こし対象の音声・動画ファイルパス。絶対パスを使用してください。",
                         },
+                        "output_path": {
+                            "type": "string",
+                            "description": "文字起こし結果の出力先ファイルパス。絶対ファイルで指定してください。",
+                        },
                     },
                     "required": ["file_path"],
                 },
@@ -286,7 +295,7 @@ class MCPServer:
         # ツールの処理
         if tool_name == "transcribe":
             try:
-                output_path = self.transcriber.transcribe(arguments["file_path"])
+                output_path = self.transcriber.transcribe(arguments["file_path"], arguments.get("output_path"))
                 self._send_result(
                     {
                         "content": [
